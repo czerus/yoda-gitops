@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      labels:
+        app: jellyfin
+    spec:
+      volumes:
+        - name: movies
+          #hostPath: /srv/mergerfs/mergefs/Movies/
+          hostPath: /srv/mergerfs/mergefs/test/
+        - name: tvshows
+          hostPath: /srv/mergerfs/mergefs/test/
+          #hostPath: /srv/mergerfs/mergefs/TVShows/
+        - name: config
+          hostPath: /srv/dev-disk-by-uuid-f0d9ee2e-5550-4e41-897d-9b8d2d01c681/pod_config/jellyfin         
+      containers:
+        - name: jellyfin
+          image: lscr.io/linuxserver/jellyfin:10.11.8
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data/movies
+              name: movies
+            - mountPath: /data/tvshows
+              name: tvshows
+          ports:
+              containerPort: 8096

@@ -33,4 +33,4 @@ spec:
             - mountPath: /data/tvshows
               name: tvshows
           ports:
-              containerPort: 8096
+              - containerPort: 8096

@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lidarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lidarr
+  template:
+    metadata:
+      labels:
+        app: lidarr
+    spec:
+      volumes:
+        - name: data
+          hostPath: 
+            path: /srv/mergerfs/mergefs/Music/
+        - name: config
+          hostPath:
+            path: /srv/dev-disk-by-uuid-f0d9ee2e-5550-4e41-897d-9b8d2d01c681/pod_config/lidarr         
+      containers:
+        - name: lidarr
+          image: ghcr.io/hotio/lidarr:nightly
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /data
+              name: data
+          ports:
+              - containerPort: 8686

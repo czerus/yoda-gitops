@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prowlarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prowlarr
+  template:
+    metadata:
+      labels:
+        app: prowlarr
+    spec:
+      volumes:
+        - name: config
+          hostPath:
+            path: /srv/dev-disk-by-uuid-f0d9ee2e-5550-4e41-897d-9b8d2d01c681/pod_config/prowlarr        
+      containers:
+        - name: prowlarr
+          image: lscr.io/linuxserver/prowlarr:latest
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /config
+              name: config
+          ports:
+              - containerPort: 9696

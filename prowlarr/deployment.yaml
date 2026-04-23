@@ -12,6 +12,7 @@ spec:
       labels:
         app: prowlarr
     spec:
+      revisionHistoryLimit: 0 
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

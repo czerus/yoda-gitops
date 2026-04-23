@@ -12,6 +12,7 @@ spec:
       labels:
         app: jellyfin
     spec:
+      revisionHistoryLimit: 0 
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

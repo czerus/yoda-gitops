@@ -12,6 +12,10 @@ spec:
       labels:
         app: sabnzbd
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       volumes:
         - name: incomplete-downloads
           hostPath:

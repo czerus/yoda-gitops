@@ -13,10 +13,6 @@ spec:
         app: jellyfin
     spec:
       revisionHistoryLimit: 0 
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
       volumes:
         - name: movies
           hostPath: 
@@ -31,6 +27,17 @@ spec:
         - name: jellyfin
           image: lscr.io/linuxserver/jellyfin:10.11.8
           imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: TZ
+              value: "Europe/Warsaw"
+            - name: JELLYFIN_CACHE_DIR
+              value: "/config/cache"
+            - name: JELLYFIN_TRANSCODES_DIR
+              value: "/config/data/transcodes"
           volumeMounts:
             - mountPath: /config
               name: config

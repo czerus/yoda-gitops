@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: lidarr
 spec:
+  revisionHistoryLimit: 0 
   replicas: 1
   selector:
     matchLabels:
@@ -12,7 +13,6 @@ spec:
       labels:
         app: lidarr
     spec:
-      revisionHistoryLimit: 0 
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: prowlarr
 spec:
+  revisionHistoryLimit: 0
   replicas: 1
   selector:
     matchLabels:
@@ -11,8 +12,7 @@ spec:
     metadata:
       labels:
         app: prowlarr
-    spec:
-      revisionHistoryLimit: 0 
+    spec: 
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

@@ -13,10 +13,6 @@ spec:
       labels:
         app: lidarr
     spec:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
       volumes:
         - name: data
           hostPath: 
@@ -28,6 +24,15 @@ spec:
         - name: lidarr
           image: ghcr.io/hotio/lidarr:nightly
           imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: UMASK
+              value: "002"
+            - name: TZ
+              value: "Europe/Warsaw"
           volumeMounts:
             - mountPath: /config
               name: config

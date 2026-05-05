@@ -28,6 +28,21 @@ spec:
         - name: slskd
           image: slskd/slskd
           imagePullPolicy: IfNotPresent
+          env:
+            - name: SLSKD_DOWNLOADS_DIR
+              value: /data/media/music
+            - name: SLSKD_INCOMPLETE_DIR
+              value: /data/slskd
+            - name: SLSKD_SLSK_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: slskd-credentials
+                  key: username
+            - name: SLSKD_SLSK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: slskd-credentials
+                  key: password
           volumeMounts:
             - mountPath: /app
               name: config

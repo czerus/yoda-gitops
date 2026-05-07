@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grimmory
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/czerus/yoda-gitops
+    targetRevision: HEAD
+    path: grimmory
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: grimmory
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

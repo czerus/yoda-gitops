@@ -14,6 +14,9 @@ spec:
         app: jellyfin
     spec:
       volumes:
+        - name: render-device
+          hostPath:
+            path: /dev/dri/renderD128
         - name: movies
           hostPath: 
             path: /srv/mergerfs/mergefs/data/media/movies
@@ -45,5 +48,9 @@ spec:
               name: movies
             - mountPath: /data/tvshows
               name: tvshows
+            - mountPath: /dev/dri/renderD128
+              name: render-device
+          securityContext:
+            privileged: true 
           ports:
               - containerPort: 8096

@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zigbee2mqtt
+spec:
+  revisionHistoryLimit: 0 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: zigbee2mqtt
+  template:
+    metadata:
+      labels:
+        app: zigbee2mqtt
+    spec:
+      initContainers:
+        - name: pass-mqtt
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              sed "s/MQTT_PASSWORD_PLACEHOLDER/$(cat /tmp/secrets/pass)/" \
+              /tmp/config/configuration.yaml > /app/data/configuration.yaml
+              #echo "=== Final config ==="
+              #cat /app/data/configuration.yaml
+          volumeMounts:
+          - mountPath: /tmp/config
+            name: config
+          - mountPath: /tmp/secrets
+            name: zigbee2mqtt-secrets
+          - mountPath: /app/data
+            name: data
+      volumes:
+        - name: zigbee2mqtt-secrets
+          secret:
+            secretName: zigbee2mqtt-secrets
+        - name: udev
+          hostPath: 
+            path: /run/udev
+        - name: data
+          hostPath:
+            path: /srv/dev-disk-by-uuid-f0d9ee2e-5550-4e41-897d-9b8d2d01c681/pod_config/zigbee2mqtt
+        - name: zigbee-device
+          hostPath:
+            path: /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2670458-if00 
+        - name: config
+          configMap:
+            name: zigbee2mqtt-config
+      containers:
+        - name: zigbee2mqtt
+          image: ghcr.io/koenkk/zigbee2mqtt:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: UMASK
+              value: "002"
+            - name: TZ
+              value: "Europe/Warsaw"
+          volumeMounts:
+            - mountPath: /app/data
+              name: data
+            - mountPath: /run/udev
+              name: udev
+              readOnly: true
+            - mountPath: /dev/ttyACM0
+              name: zigbee-device
+          securityContext:
+            privileged: true   
+          ports:
+              - containerPort: 8800

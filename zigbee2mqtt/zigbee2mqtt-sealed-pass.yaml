@@ -1,0 +1,13 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: zigbee2mqtt-secrets
+  namespace: zigbee2mqtt
+spec:
+  encryptedData:
+    pass: AgAVHvWRLmcDJo+4ZxS8wuQARJVeJOPDlT3HGVL8Y703gduORoGIM0EqzQJ8eDKmMY4fEHhbgQQrZFLsLlogswDhCjxlhB62gNgmdr4WWrtErefZf45zwaLNMQ02nwcK7fP/E9dsF3JW3uruATYqMFj8it+ivgZlGFB0T3WU+WwVdfF5DAO2rrqcXgfJnmGeSZkj/lBlf07Paud8HBpbMGK9VTkLK9R52iTcMMOkI3atiu30prQaEnz/ObNUoyNvNEptFa490mm/gOV+cqti1D52Xra1gJyUYNISDchemQzxPyyZVR3ensOHMgY9QZZcoFVrg9m6tigdZpSK4wuOO9M7qg3fKSSZZXzmUesa4RdyB2tCbYL6H1uyZAslrER92h6N76LRLZbZHudrO2o+YGvT9fHgo6vJEkCMfdSKh8ae6Ta99zZ8WI8Ce7eAF4Ikis2/Jr1h1zqlTyGuJLM3mhxwbUky1w2++5D5IL3Pr4SaegxDrsAN/8rytyjmNMZXn15boloc35FkIAYgOM8NLVO2iUuIR1x+u/FfLgqaOMokle07GWv3GRO5tnSqxiDz/3EhiYWP8BzhcQHeaECARpibSSo8F1qha2DqK+q1Vx7Bmm+USsIn+eNqO5OBl4abo/USKX6I/NTqFl4gES9Qql1zUTuRCYPkBxpaKG8M/qdRg/WBL/hZqdT8aMZ3KP0eSSFvCX+OFN7gaIDgs5YQZNvFdg==
+  template:
+    metadata:
+      name: zigbee2mqtt-secrets
+      namespace: zigbee2mqtt

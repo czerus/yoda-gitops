@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zigbee2mqtt-config
+  namespace: zigbee2mqtt
+data:
+  configuration.yaml: |
+    mqtt:
+      server: mqtt://192.168.50.39:1883
+      user: mqtt
+      password: MQTT_PASSWORD_PLACEHOLDER
+    serial:
+      port: /dev/ttyACM0
+    adapter: deconz
+    frontend:
+      enabled: true
+      port: 8800
+    homeassistant:
+      enabled: true

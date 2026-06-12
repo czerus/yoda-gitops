@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homarr
+spec:
+  revisionHistoryLimit: 0 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homarr
+  template:
+    metadata:
+      labels:
+        app: homarr
+    spec:
+      volumes:
+        - name: appdata
+          hostPath:
+            path: /srv/dev-disk-by-uuid-f0d9ee2e-5550-4e41-897d-9b8d2d01c681/pod_config/homarr    
+      containers:
+        - name: homarr
+          image: ghcr.io/homarr-labs/homarr:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: UMASK
+              value: "002"
+            - name: TZ
+              value: "Europe/Warsaw"
+            - name: SECRET_ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: homarr-encryption-key
+                  key:  encryption-key
+          volumeMounts:
+            - mountPath: /appdata
+              name: appdata
+          ports:
+              - containerPort: 7575

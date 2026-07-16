@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ml
+spec:
+  revisionHistoryLimit: 0 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ml
+  template:
+    metadata:
+      labels:
+        app: ml
+    spec:
+      volumes:
+        - name: cache
+          emptyDir: {}
+        - name: dri
+          hostPath:
+            path: /dev/dri
+      containers:
+        - name: ml
+          image: ghcr.io/immich-app/immich-machine-learning:release-openvino
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: UMASK
+              value: "002"
+            - name: TZ
+              value: "Europe/Warsaw"
+            - name: MACHINE_LEARNING_WORKERS
+              value: "1"
+            - name: OMP_NUM_THREADS
+              value: "1"
+            - name: MKL_NUM_THREADS
+              value: "1"
+          volumeMounts:
+            - mountPath: /dev/dri
+              name: dri
+            - mountPath: /cache
+              name: cache

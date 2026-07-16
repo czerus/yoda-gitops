@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich
+spec:
+  revisionHistoryLimit: 0 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immich
+  template:
+    metadata:
+      labels:
+        app: immich
+    spec:
+      volumes:
+        - name: data
+          hostPath: 
+            path: /srv/mergerfs/mergefs/PhotosImport   
+        - name: localtime
+          hostPath:
+            path: /etc/localtime    
+        - name: dri
+          hostPath:
+            path: /dev/dri
+      containers:
+        - name: immich
+          image:  ghcr.io/immich-app/immich-server:release
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: immich-credentials
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: immich-credentials
+                  key: DB_PASSWORD
+            - name: DB_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: immich-credentials
+                  key: DB_DATABASE_NAME
+            - name: DB_HOSTNAME
+              value: "postgress.svc.cluster.local"
+            - name: REDIS_HOSTNAME
+              value: "redis.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: IMMICH_TELEMETRY_INCLUDE
+              vakue: ""
+            - name: PUID
+              value: "1000"
+            - name: PGID
+              value: "1000"
+            - name: UMASK
+              value: "002"
+            - name: TZ
+              value: "Europe/Warsaw"
+            - name: IMMICH_PORT
+              value: "2283"
+            # - name: DB_URL
+            #   value: 192.168.50.39
+          volumeMounts:
+            - mountPath: /data
+              name: data
+            - mountPath: /etc/localtime
+              name: localtime
+              readOnly: true
+            - name: dri
+              mountPath: /dev/dri
+          ports:
+              - containerPort: 2283

@@ -71,4 +71,4 @@ spec:
           securityContext:
             privileged: true   
           ports:
-              - containerPort: 8800
+              - containerPort: 8080

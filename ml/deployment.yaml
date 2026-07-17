@@ -43,3 +43,5 @@ spec:
               name: dri
             - mountPath: /cache
               name: cache
+      ports:
+        - containerPort: 3003

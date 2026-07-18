@@ -22,7 +22,11 @@ spec:
       containers:
         - name: ml
           image: ghcr.io/immich-app/immich-machine-learning:release-openvino
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "4"
+              memory: "4048Mi"
           env:
             - name: PUID
               value: "1000"

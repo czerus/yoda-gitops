@@ -26,7 +26,11 @@ spec:
       containers:
         - name: immich
           image:  ghcr.io/immich-app/immich-server:release
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "3"
+              memory: "3048Mi"
           env:
             - name: DB_USERNAME
               valueFrom:

@@ -30,7 +30,7 @@ spec:
       containers:
         - name: bazarr
           image: lscr.io/linuxserver/bazarr:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           volumeMounts:
             - mountPath: /config
               name: config

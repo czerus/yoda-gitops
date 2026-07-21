@@ -20,7 +20,7 @@ spec:
       containers:
         - name: mariadb
           image: lscr.io/linuxserver/mariadb:11.4.5
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: PUID
               value: "1000"

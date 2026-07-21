@@ -27,7 +27,7 @@ spec:
       containers:
         - name: slskd
           image: slskd/slskd
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: SLSKD_DOWNLOADS_DIR
               value: /data/media/music

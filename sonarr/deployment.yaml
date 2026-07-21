@@ -27,7 +27,7 @@ spec:
       containers:
         - name: bazarr
           image: lscr.io/linuxserver/sonarr:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           volumeMounts:
             - mountPath: /config
               name: config

@@ -23,7 +23,7 @@ spec:
       containers:
         - name: lidarr
           image: ghcr.io/hotio/lidarr:nightly
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: PUID
               value: "1000"

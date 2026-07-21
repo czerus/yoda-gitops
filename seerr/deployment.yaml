@@ -24,7 +24,7 @@ spec:
       containers:
         - name: seerr
           image: ghcr.io/seerr-team/seerr:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           volumeMounts:
             - mountPath: /app/config
               name: config

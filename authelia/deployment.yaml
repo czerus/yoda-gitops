@@ -24,7 +24,7 @@ spec:
       containers:
         - name: authelia
           image: docker.io/authelia/authelia:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: JWT_SECRET
               valueFrom:

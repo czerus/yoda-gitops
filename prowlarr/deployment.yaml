@@ -24,7 +24,7 @@ spec:
       containers:
         - name: prowlarr
           image: lscr.io/linuxserver/prowlarr:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           volumeMounts:
             - mountPath: /config
               name: config

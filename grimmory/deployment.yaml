@@ -26,7 +26,7 @@ spec:
       containers:
         - name: grimmory
           image: grimmory/grimmory:latest
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: PUID
               value: "1000"

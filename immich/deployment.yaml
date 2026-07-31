@@ -29,8 +29,8 @@ spec:
           imagePullPolicy: Always
           resources:
             limits:
-              cpu: "3"
-              memory: "3048Mi"
+              cpu: "2"
+              memory: "4048Mi"
           env:
             - name: DB_USERNAME
               valueFrom:
@@ -56,7 +56,9 @@ spec:
             - name: REDIS_PORT
               value: "6379"
             - name: IMMICH_TELEMETRY_INCLUDE
-              vakue: ""
+              value: ""
+            - name: REDIS_DBINDEX
+              value: "0"
             - name: PUID
               value: "1000"
             - name: PGID

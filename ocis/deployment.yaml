@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ocis
+  namespace: ocis
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ocis
+  template:
+    metadata:
+      labels:
+        app: ocis
+    spec:
+      initContainers:
+        - name: init-ocis
+          image: owncloud/ocis:latest
+          command:
+            - sh
+            - /scripts/init.sh
+          env:
+            - name: OCIS_INSECURE
+              value: "true"
+            - name: OCIS_URL
+              value: "http://192.168.50.39:9200"
+            - name: PROXY_TLS
+              value: "false"
+            - name: OCIS_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ocis-credentials
+                  key: admin-password
+          volumeMounts:
+            - mountPath: /etc/ocis
+              name: ocis-config
+            - mountPath: /scripts
+              name: init-script
+      containers:
+        - name: ocis
+          image: owncloud/ocis:8.1.0
+          imagePullPolicy: Always
+          command:
+            - ocis
+            - server
+          env:
+            - name: OCIS_URL
+              value: "https://192.168.50.39:9200"
+            - name: OCIS_INSECURE
+              value: "true"
+            # - name: PROXY_TLS
+            #   value: "false"
+            # - name: OCIS_LOG_LEVEL
+            #   value: "info"
+            # - name: OCIS_RUNTIME_HOST
+            #   value: "0.0.0.0"
+            # - name: OCIS_CONFIG_DIR
+            #   value: "/etc/ocis"
+            # - name: OCIS_BASE_DATA_PATH
+            #   value: "/var/lib/ocis"
+            # - name: PROXY_ENABLE_TLS
+            #   value: "true" 
+            - name: IDM_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ocis-credentials
+                  key: admin-password
+            # - name: OCIS_LOG_COLOR
+            #   value: "false"      # disables color output that needs TTY
+            # - name: OCIS_LOG_PRETTY
+            #   value: "false" 
+            - name: "OCIS_ADMIN_USER_ID"   # disables pretty printing that needs TTY
+              valueFrom:
+                secretKeyRef:
+                  name: ocis-credentials
+                  key: admin-user-id
+            - name: PROXY_HTTP_ADDR
+              value: "0.0.0.0:9200"
+            - name: TZ
+              value: "Europe/Warsaw"
+          volumeMounts:
+            - mountPath: /etc/ocis
+              name: ocis-config
+            - mountPath: /var/lib/ocis
+              name: ocis-data
+            - mountPath: /etc/localtime
+              name: localtime
+              readOnly: true
+          ports:
+            - containerPort: 9200
+
+      volumes:
+        - name: ocis-config
+          hostPath:
+            path: /srv/dev-disk-by-uuid-f0d9ee2e-5550-4e41-897d-9b8d2d01c681/pod_config/ocis/config
+        - name: ocis-data
+          hostPath:
+            path: /srv/mergerfs/mergefs/ocis
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: init-script
+          configMap:
+            name: ocis-init-script
+            defaultMode: 0755
+        

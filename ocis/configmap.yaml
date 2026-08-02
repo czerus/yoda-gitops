@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ocis-init-script
+  namespace: ocis
+data:
+  init.sh: |
+    #!/bin/sh
+    if [ ! -f /etc/ocis/ocis.yaml ]; then
+      echo "Initializing OCIS..."
+      ocis init --insecure yes --force-overwrite
+    else
+      echo "OCIS already initialized, skipping..."
+    fi

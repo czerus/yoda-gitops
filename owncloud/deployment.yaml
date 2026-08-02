@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: owncloud
+spec:
+  revisionHistoryLimit: 0 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: owncloud
+  template:
+    metadata:
+      labels:
+        app: owncloud
+    spec:
+      volumes:
+        - name: data
+          hostPath: 
+            path: /srv/dev-disk-by-uuid-f0d9ee2e-5550-4e41-897d-9b8d2d01c681/pod_config/owncloud  
+      containers:
+        - name: owncloud
+          image: owncloud/server:latest
+          imagePullPolicy: Always
+          env:
+            - name: OWNCLOUD_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_DOMAIN
+            - name: OWNCLOUD_TRUSTED_DOMAINS
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_TRUSTED_DOMAINS
+            - name: OWNCLOUD_DB_TYPE
+              value: "mysql"
+            - name: OWNCLOUD_DB_NAME
+              value: "owncloud"
+            - name: OWNCLOUD_DB_HOST
+              value: "192.168.50.39"
+            - name:  OWNCLOUD_UID
+              value: "33"
+            - name: OWNCLOUD_GID
+              value: "33"
+            - name: OWNCLOUD_DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_DB_USERNAME
+            - name: OWNCLOUD_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_DB_PASSWORD
+            - name: OWNCLOUD_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_ADMIN_USERNAME
+            - name: OWNCLOUD_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: owncloud-credentials
+                  key: OWNCLOUD_ADMIN_PASSWORD
+            - name: OWNCLOUD_MYSQL_UTF8MB4
+              value: "true"
+            - name: OWNCLOUD_REDIS_ENABLED
+              value: "true"
+            - name: OWNCLOUD_REDIS_HOST
+              value: "192.168.50.39"
+            - name: OWNCLOUD_REDIS_PORT
+              value: "6379"
+            - name: OWNCLOUD_REDIS_DB
+              value: "1"
+            - name: TZ
+              value: "Europe/Warsaw"
+          volumeMounts:
+            - mountPath: /mnt/data/
+              name: data
+          ports:
+              - containerPort: 8080

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collabora
+  namespace: collabora
+spec:
+  revisionHistoryLimit: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: collabora
+  template:
+    metadata:
+      labels:
+        app: collabora
+    spec:
+      containers:
+        - name: collabora
+          image: collabora/code:latest
+          imagePullPolicy: Always
+          env:
+            - name: aliasgroup1
+              value: "https://192.168.50.39"
+            - name: DONT_GEN_SSL_CERT
+              value: "YES"
+            - name: extra_params
+              value: "--o:ssl.enable=false --o:ssl.termination=true"
+            - name: username
+              valueFrom:
+                secretKeyRef:
+                  name: collabora-credentials
+                  key: username
+            - name: password
+              valueFrom:
+                secretKeyRef:
+                  name: collabora-credentials
+                  key: password
+            - name: TZ
+              value: "Europe/Warsaw"
+          ports:
+            - containerPort: 9980
+          securityContext:
+            privileged: true      # collabora requires this
+          volumeMounts:
+            - mountPath: /etc/localtime
+              name: localtime
+              readOnly: true

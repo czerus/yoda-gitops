@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: droppedneedle
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/czerus/yoda-gitops
+    targetRevision: HEAD
+    path: droppedneedle
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: droppedneedle
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
